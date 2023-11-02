@@ -11,15 +11,18 @@ class DCT_Embed(object):
         # 读取背景
 
         background = cv2.imread(backgroundurl)
+        if background.shape[0]%block_size!=0 or background.shape[1]%block_size!=0:
+            background=cv2.resize(background,(background.shape[1]//block_size*block_size,background.shape[0]//block_size*block_size))
         self.background = cv2.cvtColor(background, cv2.COLOR_BGR2RGB)
 
 
         # 读取水印
         watermark=cv2.imread(watermarkurl, cv2.IMREAD_GRAYSCALE)
         # 处理水印长宽
+        
         bgh=self.background.shape[0]//block_size
         bgl=self.background.shape[1]//block_size
-        
+    
         if watermark.shape[0]//bgh>=watermark.shape[1]//bgl:
             watermark = cv2.resize( watermark,(watermark.shape[1]//(watermark.shape[0]//bgh),bgh))
         else:
